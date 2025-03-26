@@ -2,6 +2,7 @@ package com.rocketninesolutions;
 
 import java.time.LocalDateTime;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 
@@ -19,7 +20,12 @@ public class SpaceportDepartureBoard {
     }
 
     private void sortLaunches() {
-        throw new UnsupportedOperationException("TODO - implement the sorting logic!");
+        Collections.sort(launchList, new Comparator<LaunchInfo>(){
+            public int compare(LaunchInfo o1, LaunchInfo o2){
+                return o1.getDestination().compareTo(o2.getDestination());
+            }
+        });
+//        throw new UnsupportedOperationException("TODO - implement the sorting logic!");
     }
 
     private void addNewLaunch(LaunchInfo launchInfo) {
