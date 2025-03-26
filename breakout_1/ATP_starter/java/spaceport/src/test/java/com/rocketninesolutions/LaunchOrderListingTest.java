@@ -13,19 +13,16 @@ class LaunchOrderListingTest {
     void LaunchesAre_SortedByDestination_DestinationsAreUnique() {
         // Step 1. Create LaunchInfoProviderStub (that implements ISpacelineLaunchInfoProvider)
         List<LaunchInfo> unorderedLaunches = new ArrayList<LaunchInfo>();
-        List<LaunchInfo> expectedLaunches = new ArrayList<LaunchInfo>();
+        List<LaunchInfo> orderedLaunches = new ArrayList<LaunchInfo>();
 
-        LaunchInfo launchA = new LaunchInfo(UUID.randomUUID());
-        LaunchInfo launchB = new LaunchInfo(UUID.randomUUID());
-
-        launchA.setDestination("A");
-        launchB.setDestination("B");
+        LaunchInfo launchA = createLaunchTo("A");
+        LaunchInfo launchB = createLaunchTo("B");
 
         unorderedLaunches.add(launchB); //explicitly in wrong order
         unorderedLaunches.add(launchA);
 
-        expectedLaunches.add(launchA);
-        expectedLaunches.add(launchB);
+        orderedLaunches.add(launchA);
+        orderedLaunches.add(launchB);
 
         // Step 2 & 3 & 4. Create SUT - SpaceportDepartureBoard, using Constructor Injection
         // Exercising this behavior happens during construction of the System Under Test
@@ -38,6 +35,12 @@ class LaunchOrderListingTest {
                 () -> Assertions.assertEquals("A", listToBeTested.get(0).getDestination()),
                 () -> Assertions.assertEquals("B", listToBeTested.get(1).getDestination())
         );
+    }
+
+    private static LaunchInfo createLaunchTo(String a) {
+        LaunchInfo launchA = new LaunchInfo(UUID.randomUUID());
+        launchA.setDestination(a);
+        return launchA;
     }
 
     private class MockProvider implements ISpacelineLaunchInfoProvider {

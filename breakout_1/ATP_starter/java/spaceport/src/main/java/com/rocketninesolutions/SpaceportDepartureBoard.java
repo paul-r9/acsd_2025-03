@@ -25,7 +25,6 @@ public class SpaceportDepartureBoard {
                 return o1.getDestination().compareTo(o2.getDestination());
             }
         });
-//        throw new UnsupportedOperationException("TODO - implement the sorting logic!");
     }
 
     private void addNewLaunch(LaunchInfo launchInfo) {
