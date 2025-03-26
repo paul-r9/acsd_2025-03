@@ -17,32 +17,42 @@ class GildedRose {
     public void updateQuality() {
         for (int i = LOWEST_QUALITY; i < items.length; i++) {
             Item item = items[i];
-            if (!item.name.equals(AGED_BRIE)
-                    && !item.name.equals(PASSES)) {
-                compareQuality(item);
-            } else {
-
-
-                elBlock(item);
-            }
-
-            if (!item.name.equals(HAND_OF_RAGNAROS)) {
+            if (isConjuredItem(item)) {
+                if (item.sellWithinDays == 0){
+                    item.quality = item.quality - 4;
+                }
+                else{
+                    item.quality = item.quality - 2;
+                }
                 item.sellWithinDays = item.sellWithinDays - 1;
             }
-
-            if (item.sellWithinDays < LOWEST_QUALITY) {
-                if (!item.name.equals(AGED_BRIE)) {
-                    if (!item.name.equals(PASSES)) {
-                        compareQuality(item);
-                    } else {
-                        item.quality = item.quality - item.quality;
-                    }
+            else{
+                if (!item.name.equals(AGED_BRIE)
+                        && !item.name.equals(PASSES)) {
+                    compareQuality(item);
                 } else {
-                    if (item.quality < HIGHEST_QUALITY) {
-                        item.quality = item.quality + 1;
+                    updateQualityForAgedBrieAndBackstagePasses(item);
+                }
+
+                if (!item.name.equals(HAND_OF_RAGNAROS)) {
+                    item.sellWithinDays = item.sellWithinDays - 1;
+                }
+
+                if (item.sellWithinDays < LOWEST_QUALITY) {
+                    if (!item.name.equals(AGED_BRIE)) {
+                        if (!item.name.equals(PASSES)) {
+                            compareQuality(item);
+                        } else {
+                            item.quality = item.quality - item.quality;
+                        }
+                    } else {
+                        if (item.quality < HIGHEST_QUALITY) {
+                            item.quality = item.quality + 1;
+                        }
                     }
                 }
             }
+
         }
     }
 
@@ -55,7 +65,7 @@ class GildedRose {
     }
 
 
-    private static void elBlock(Item item) {
+    private static void updateQualityForAgedBrieAndBackstagePasses(Item item) {
         if (item.quality < HIGHEST_QUALITY) {
             item.quality = item.quality + 1;
 
@@ -74,5 +84,9 @@ class GildedRose {
                 }
             }
         }
+    }
+    private static boolean isConjuredItem(Item item) {
+        return item.name.contains("Conjured");
+
     }
 }

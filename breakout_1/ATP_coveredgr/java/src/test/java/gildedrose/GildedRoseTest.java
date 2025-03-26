@@ -10,6 +10,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class GildedRoseTest {
 
     public static final String BACKSTAGE_PASS = "Backstage passes to a TAFKAL80ETC concert";
+    public static final String CONJURED_ITEM = "Conjured Mana Bun";
 
     private Item[] createItemArray(String itemName, int sellIn, int quality) {
         return new Item[] { new Item(itemName, sellIn, quality) };
@@ -43,7 +44,7 @@ public class GildedRoseTest {
     }
 
     @ParameterizedTest(name = "{0} item SellIn decreases each update")
-    @CsvSource({"generic item", "Aged Brie", BACKSTAGE_PASS})
+    @CsvSource({"generic item", "Aged Brie", BACKSTAGE_PASS, CONJURED_ITEM})
     void NonLegendaryItem_SellInDate_Decreases(String itemName) {
         GildedRose sut = new GildedRose(createItemArray(itemName, 8, 10));
         sut.updateQuality();
@@ -160,4 +161,18 @@ public class GildedRoseTest {
 
     //TODO: NEW BEHAVIOR
     // conjured items
+
+    @Test
+    void ConjuredItem_QualityDecreasesTwiceEachDay() {
+        GildedRose sut = new GildedRose(createItemArray(CONJURED_ITEM, 10, 5));
+        sut.updateQuality();
+        assertEquals(3, sut.items[0].quality, "Conjured item decreases quality twice per day");
+    }
+    @Test
+    void ConjuredItem_QualityDecreasesFourTimesEachDayAfterSellIn(){
+        GildedRose sut = new GildedRose(createItemArray(CONJURED_ITEM, 0, 10));
+        sut.updateQuality();
+        assertEquals(6, sut.items[0].quality, "Conjured item decreases quality four times per day after sell in");
+
+    }
 }
